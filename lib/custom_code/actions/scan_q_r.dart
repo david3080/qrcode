@@ -10,10 +10,34 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 Future<String> scanQR(BuildContext context) {
   return Navigator.of(context).push<String>(
     MaterialPageRoute(builder: (context) {
-      return MobileScanner(
-        onDetect: (barcode, args) {
-          Navigator.pop(context, barcode.rawValue);
-        },
+      return Stack(
+        children: [
+          MobileScanner(
+            onDetect: (barcode, args) {
+              Navigator.pop(context, barcode.rawValue);
+            },
+          ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            margin: const EdgeInsets.only(
+              bottom: 35.0,
+              left: 25.0,
+            ),
+            child: IconButton(
+              onPressed: () {
+                scannerController
+                  ..stop()
+                  ..dispose();
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.close_outlined,
+                size: 40.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       );
     }),
   );
